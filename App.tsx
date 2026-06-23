@@ -1,20 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { TaskProvider } from './src/context/TaskContext';
+import TaskListScreen from './src/screens/TaskListScreen';
+import AddTaskScreen from './src/screens/AddTaskScreen';
+import TaskDetailScreen from './src/screens/TaskDetailScreen';
+
+export type RootStackParamList = {
+  TaskList: undefined;
+  AddTask: undefined;
+  TaskDetail: { taskId: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <TaskProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: '#6C63FF' },
+            headerTintColor: '#fff',
+            headerTitleStyle: { fontWeight: '700' },
+            contentStyle: { backgroundColor: '#F4F4FB' },
+          }}
+        >
+          <Stack.Screen
+            name="TaskList"
+            component={TaskListScreen}
+            options={{ title: 'My Tasks' }}
+          />
+          <Stack.Screen
+            name="AddTask"
+            component={AddTaskScreen}
+            options={{ title: 'New Task' }}
+          />
+          <Stack.Screen
+            name="TaskDetail"
+            component={TaskDetailScreen}
+            options={{ title: 'Task Details' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </TaskProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
